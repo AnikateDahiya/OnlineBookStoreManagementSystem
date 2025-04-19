@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Checkout - Book Heaven</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+        }
+        main {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .order-summary {
+            margin-bottom: 20px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: right;
+            margin-top: 10px;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        form input, form select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        form button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        form button:hover {
+            background: #218838;
+        }
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: green;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Checkout</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart (<span id="cart-count">0</span>)</a></li>
+                <li><a href="login.html" class="login-button">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Order Summary</h2>
+        <div id="order-summary" class="order-summary"></div>
+        <div class="total" id="total-price">Total: $0.00</div>
+
+        <h2>Payment Details</h2>
+        <form id="checkout-form">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" required />
+
+            <label for="address">Shipping Address</label>
+            <input type="text" id="address" required />
+
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" maxlength="16" required />
+
+            <label for="expiry">Expiry Date</label>
+            <input type="month" id="expiry" required />
+
+            <label for="cvv">CVV</label>
+            <input type="password" id="cvv" maxlength="4" required />
+
+            <button type="submit">Place Order</button>
+        </form>
+        <div id="message"></div>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script>
+        // Load cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Display cart items in order summary
+        function displayOrderSummary() {
+            const orderSummary = document.getElementById('order-summary');
+            orderSummary.innerHTML = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'order-item';
+                div.innerHTML = `
+                    <span>${item.title} (x${item.quantity})</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                orderSummary.appendChild(div);
+                total += item.price * item.quantity;
+            });
+            document.getElementById('total-price').innerText = 'Total: $' + total.toFixed(2);
+        }
+
+        displayOrderSummary();
+
+        // Update cart count in nav
+        function updateCartCount() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+        }
+
+        updateCartCount();
+
+        // Handle form submission
+        document.getElementById('checkout-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Simple form validation could be added here
+
+            // Prepare order details to pass to receipt page
+            const name = document.getElementById('name').value;
+            const totalPriceText = document.getElementById('total-price').innerText;
+            const totalAmount = totalPriceText.replace('Total: $', '');
+
+            const orderDetails = {
+                name: name,
+                amount: totalAmount,
+                books: cart
+            };
+
+            // Save order details to sessionStorage
+            sessionStorage.setItem('orderDetails', JSON.stringify(orderDetails));
+
+            // Clear cart after order placed
+            localStorage.removeItem('cart');
+            cart = [];
+
+            updateCartCount();
+            displayOrderSummary();
+
+            // Redirect to receipt page
+            window.location.href = 'receipt.html';
+        });
+
+        function generateReceipt() {
+            const main = document.querySelector('main');
+            main.innerHTML = '';
+
+            const receiptDiv = document.createElement('div');
+            receiptDiv.style.maxWidth = '600px';
+            receiptDiv.style.margin = '30px auto';
+            receiptDiv.style.background = '#fff';
+            receiptDiv.style.padding = '20px';
+            receiptDiv.style.borderRadius = '5px';
+            receiptDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            receiptDiv.style.textAlign = 'center';
+            receiptDiv.style.fontFamily = 'Arial, sans-serif';
+            receiptDiv.style.color = '#333';
+
+            const heading = document.createElement('h2');
+            heading.innerText = 'Receipt';
+            heading.style.borderBottom = '2px solid #28a745';
+            heading.style.paddingBottom = '10px';
+            heading.style.marginBottom = '20px';
+            receiptDiv.appendChild(heading);
+
+            const name = document.getElementById('name').value;
+            const totalPriceText = document.getElementById('total-price').innerText;
+            const totalAmount = totalPriceText.replace('Total: $', '');
+
+            // List purchased books
+            const booksList = document.createElement('div');
+            booksList.style.textAlign = 'left';
+            booksList.style.margin = '20px 0';
+
+            const booksHeading = document.createElement('h3');
+            booksHeading.innerText = 'Purchased Books:';
+            booksHeading.style.borderBottom = '1px solid #ccc';
+            booksHeading.style.paddingBottom = '5px';
+            booksList.appendChild(booksHeading);
+
+            cart.forEach(item => {
+                const bookItem = document.createElement('p');
+                bookItem.style.margin = '5px 0';
+                bookItem.innerText = `${item.title} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`;
+                booksList.appendChild(bookItem);
+            });
+
+            receiptDiv.appendChild(booksList);
+
+            // Name and amount
+            const namePara = document.createElement('p');
+            namePara.innerHTML = `<strong>Name:</strong> ${name}`;
+            namePara.style.fontSize = '1.1em';
+            namePara.style.margin = '10px 0';
+            receiptDiv.appendChild(namePara);
+
+            const amountPara = document.createElement('p');
+            amountPara.innerHTML = `<strong>Amount Paid:</strong> $${totalAmount}`;
+            amountPara.style.fontSize = '1.1em';
+            amountPara.style.margin = '10px 0';
+            receiptDiv.appendChild(amountPara);
+
+            // Thank you message
+            const thanksPara = document.createElement('p');
+            thanksPara.style.marginTop = '20px';
+            thanksPara.style.fontWeight = 'bold';
+            thanksPara.style.fontSize = '1.2em';
+            thanksPara.innerText = 'Thank you for your purchase!';
+            receiptDiv.appendChild(thanksPara);
+
+            // Button to redirect to home page
+            const homeButton = document.createElement('button');
+            homeButton.innerText = 'Return to Home Page';
+            homeButton.style.marginTop = '20px';
+            homeButton.style.padding = '10px 20px';
+            homeButton.style.backgroundColor = '#28a745';
+            homeButton.style.color = 'white';
+            homeButton.style.border = 'none';
+            homeButton.style.borderRadius = '5px';
+            homeButton.style.cursor = 'pointer';
+            homeButton.style.fontSize = '1em';
+            homeButton.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            receiptDiv.appendChild(homeButton);
+
+            main.appendChild(receiptDiv);
+        }
+    </script>
+</body>
+</html>

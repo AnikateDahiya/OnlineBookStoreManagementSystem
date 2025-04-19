@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Online Bookstore</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #598dc1;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #1abc9c;
+        }
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .hero {
+            background: url('images/hero-bg.jpg') center center/cover no-repeat;
+            border-radius: 12px;
+            padding: 80px 40px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            margin-bottom: 50px;
+        }
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+        .featured-books {
+            margin-bottom: 60px;
+        }
+        .featured-books h2 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #1abc9c;
+            display: inline-block;
+            padding-bottom: 5px;
+            color: #2c3e50;
+        }
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .book-item {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .book-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .book-item img {
+            width: 160px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .book-item h3 {
+            font-size: 1.3rem;
+            margin: 10px 0 5px 0;
+            color: #34495e;
+            text-align: center;
+        }
+        .book-item p {
+            margin: 4px 0;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        .btn {
+            margin-top: auto;
+            width: 100%;
+            padding: 12px 0;
+            background: #1abc9c;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
+        }
+        .btn:hover {
+            background: #16a085;
+            box-shadow: 0 6px 18px rgba(22, 160, 133, 0.6);
+        }
+        .btn + .btn {
+            margin-top: 10px;
+            background: #e67e22;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
+        }
+        .btn + .btn:hover {
+            background: #d35400;
+            box-shadow: 0 6px 18px rgba(211, 84, 0, 0.6);
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-top: 60px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+        }
+        @media (max-width: 600px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .book-item img {
+                width: 120px;
+                height: 180px;
+            }
+            .book-item h3 {
+                font-size: 1.1rem;
+            }
+            .btn {
+                font-size: 0.9rem;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Book Heaven</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart (<span id="cart-count">0</span>)</a></li>
+            </ul>
+            <div class="login-logout-container">
+                <a href="login.html" class="login-button" id="login-link">Login</a>
+                <a href="#" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h2>Your One-Stop Shop for Books</h2>
+            <p>Discover a wide range of books across various genres. Whether you're looking for the latest bestsellers or classic literature, we have something for everyone!</p>
+        </section>
+        <section class="featured-books" id="featured-books">
+            <h2>Featured Books</h2>
+            <div class="book-list" id="featured-book-list">
+                <!-- Featured books will be dynamically loaded here -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script>
+        const featuredBookList = document.getElementById('featured-book-list');
+
+        // Load books from localStorage or initialize empty array
+        let books = JSON.parse(localStorage.getItem('books')) || [];
+
+        // Function to add item to cart
+        function addToCart(title, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.title === title);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ title, price: parseFloat(price), quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        // Function to update cart count in the navigation
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+        }
+
+        // Function to render featured books dynamically
+        function renderFeaturedBooks() {
+            featuredBookList.innerHTML = '';
+            const featuredBooks = books.filter(book => book.featured);
+            featuredBooks.forEach(book => {
+                const bookItem = document.createElement('div');
+                bookItem.className = 'book-item';
+                bookItem.innerHTML = `
+                    <a href="book-description.html?title=${encodeURIComponent(book.title)}">
+                        <img src="${book.image}" alt="${book.title}" />
+                        <h3>${book.title}</h3>
+                    </a>
+                    <p>Author: ${book.author}</p>
+                    <p>Price: $${book.price.toFixed(2)}</p>
+                    <button class="btn add-to-cart" data-title="${book.title}" data-price="${book.price}">Add to Cart</button>
+                    <button class="btn direct-buy" data-title="${book.title}" data-price="${book.price}">Buy Now</button>
+                `;
+                featuredBookList.appendChild(bookItem);
+            });
+
+            // Attach event listeners for add to cart and buy now buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const title = this.getAttribute('data-title');
+                    const price = this.getAttribute('data-price');
+                    addToCart(title, price);
+                });
+            });
+
+            document.querySelectorAll('.direct-buy').forEach(button => {
+                button.addEventListener('click', function() {
+                    const title = this.getAttribute('data-title');
+                    const price = this.getAttribute('data-price');
+                    let cart = [{ title, price: parseFloat(price), quantity: 1 }];
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    window.location.href = 'checkout.html';
+                });
+            });
+        }
+
+        // Logout functionality
+        const loginLink = document.getElementById('login-link');
+        const logoutLink = document.getElementById('logout-link');
+
+        function checkLoginStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        }
+
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+
+        // Initial render and cart count update
+        renderFeaturedBooks();
+        updateCartCount();
+        checkLoginStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Receipt - Book Heaven</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+        }
+        main {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .books-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .books-list h3 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .books-list p {
+            margin: 5px 0;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Receipt</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Payment Successful!</h2>
+        <div class="books-list" id="books-list"></div>
+        <p id="name-display"></p>
+        <p id="amount-display"></p>
+        <p style="font-weight:bold; margin-top:20px;">Thank you for your purchase!</p>
+        <button id="home-button">Return to Home Page</button>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script>
+        // Retrieve order details from sessionStorage
+        const orderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
+
+        const booksListDiv = document.getElementById('books-list');
+        const nameDisplay = document.getElementById('name-display');
+        const amountDisplay = document.getElementById('amount-display');
+        const homeButton = document.getElementById('home-button');
+
+        if (orderDetails) {
+            // Display purchased books
+            const booksHeading = document.createElement('h3');
+            booksHeading.innerText = 'Purchased Books:';
+            booksListDiv.appendChild(booksHeading);
+
+            orderDetails.books.forEach(item => {
+                const p = document.createElement('p');
+                p.innerText = `${item.title} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`;
+                booksListDiv.appendChild(p);
+            });
+
+            // Display name and amount
+            nameDisplay.innerHTML = `<strong>Name:</strong> ${orderDetails.name}`;
+            amountDisplay.innerHTML = `<strong>Amount Paid:</strong> $${orderDetails.amount}`;
+        } else {
+            booksListDiv.innerText = 'No order details found.';
+        }
+
+        homeButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

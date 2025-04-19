@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], textarea {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            resize: vertical;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #218838;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Contact Us</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart</a></li>
+            </ul>
+            <div class="login-logout-container">
+                <a href="login.html" class="login-button" id="login-link">Login</a>
+                <a href="#" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h2>Get in Touch</h2>
+        <form id="contactForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required />
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <div id="formMessage" style="margin-top:15px; text-align:center; font-weight:bold;"></div>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = this.name.value.trim();
+            const email = this.email.value.trim();
+            const message = this.message.value.trim();
+            const formMessage = document.getElementById('formMessage');
+
+            if (!name || !email || !message) {
+                formMessage.style.color = 'red';
+                formMessage.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            // For demo, just show success message
+            formMessage.style.color = 'green';
+            formMessage.textContent = 'Thank you for contacting us, ' + name + '! We will get back to you shortly.';
+
+            // Clear form fields
+            this.reset();
+        });
+
+        // Login/logout toggle logic for navigation links
+        const loginLink = document.getElementById('login-link');
+        const logoutLink = document.getElementById('logout-link');
+
+        function checkLoginStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        }
+
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+
+        checkLoginStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            /* background: #333; */
+            background: #f4f4f4;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .book-item:hover {
+            transform: scale(1.05);
+        }
+
+        .book-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .book-item h3 {
+            margin: 10px 0;
+        }
+
+        .book-item p {
+            margin: 5px 0;
+        }
+
+        .btn {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #218838;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Our Products</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart (<span id="cart-count">0</span>)</a></li>
+            </ul>
+            <div class="login-logout-container">
+                <a href="login.html" class="login-button" id="login-link">Login</a>
+                <a href="#" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h2>Available Books</h2>
+        <section class="product-list" id="product-list">
+            <!-- Books will be dynamically loaded here -->
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Haeven. All rights reserved.</p>
+    </footer>
+    <script>
+        const productList = document.getElementById('product-list');
+
+        // Load books from localStorage or initialize empty array
+        let books = JSON.parse(localStorage.getItem('books')) || [];
+
+        // Function to add item to cart
+        function addToCart(title, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.title === title);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ title, price: parseFloat(price), quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        // Function to update cart count in the navigation
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+        }
+
+        // Function to render books dynamically
+        function renderBooks() {
+            productList.innerHTML = '';
+            books.forEach(book => {
+                const bookItem = document.createElement('div');
+                bookItem.className = 'book-item';
+                bookItem.innerHTML = `
+                    <a href="book-description.html?title=${encodeURIComponent(book.title)}">
+                        <img src="${book.image}" alt="${book.title}" />
+                        <h3>${book.title}</h3>
+                    </a>
+                    <p>Author: ${book.author}</p>
+                    <p>Price: $${book.price.toFixed(2)}</p>
+                    <button class="btn add-to-cart" data-title="${book.title}" data-price="${book.price}">Add to Cart</button>
+                    <button class="btn direct-buy" data-title="${book.title}" data-price="${book.price}">Buy Now</button>
+                `;
+                productList.appendChild(bookItem);
+            });
+
+            // Attach event listeners for add to cart and buy now buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const title = this.getAttribute('data-title');
+                    const price = this.getAttribute('data-price');
+                    addToCart(title, price);
+                });
+            });
+
+            document.querySelectorAll('.direct-buy').forEach(button => {
+                button.addEventListener('click', function() {
+                    const title = this.getAttribute('data-title');
+                    const price = this.getAttribute('data-price');
+                    let cart = [{ title, price: parseFloat(price), quantity: 1 }];
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    window.location.href = 'checkout.html';
+                });
+            });
+        }
+
+        // Initial render and cart count update
+        renderBooks();
+        updateCartCount();
+
+        // Login/logout toggle logic for navigation links
+        const loginLink = document.getElementById('login-link');
+        const logoutLink = document.getElementById('logout-link');
+
+        function checkLoginStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        }
+
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+
+        checkLoginStatus();
+    </script>
+</body>
+</html>

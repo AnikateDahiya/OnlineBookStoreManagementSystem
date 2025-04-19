@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Book Description</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            max-width: 700px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .book-image {
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 300px;
+            border-radius: 8px;
+        }
+        .book-details p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+        a.back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Book Heaven</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html" class="login-button">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <a href="products.html" class="back-link">&larr; Back to Products</a>
+        <h2 id="book-title">Book Title</h2>
+        <img id="book-image" class="book-image" src="" alt="Book Image" />
+        <div class="book-details">
+            <p><strong>Author:</strong> <span id="book-author"></span></p>
+            <p><strong>Price:</strong> $<span id="book-price"></span></p>
+            <p id="book-description"></p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script>
+        // Book data - in a real app this would come from a backend or API
+        // Remove hardcoded books object to support dynamic loading from localStorage
+        // Load books from localStorage or initialize empty array
+        const books = JSON.parse(localStorage.getItem('books')) || [];
+
+        // Function to get query parameter by name
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Load book details based on title query parameter
+        function loadBookDetails() {
+            const title = getQueryParam('title');
+            if (!title) {
+                document.getElementById('book-title').innerText = "Book not found";
+                document.getElementById('book-description').innerText = "Sorry, the book you are looking for does not exist.";
+                return;
+            }
+            // Find book by title (case insensitive)
+            const book = books.find(b => b.title.toLowerCase() === title.toLowerCase());
+            if (!book) {
+                document.getElementById('book-title').innerText = "Book not found";
+                document.getElementById('book-description').innerText = "Sorry, the book you are looking for does not exist.";
+                return;
+            }
+            document.getElementById('book-title').innerText = book.title;
+            document.getElementById('book-author').innerText = book.author;
+            document.getElementById('book-price').innerText = book.price.toFixed(2);
+            document.getElementById('book-description').innerText = book.description;
+            const img = document.getElementById('book-image');
+            img.src = book.image;
+            img.alt = book.title;
+        }
+
+        loadBookDetails();
+    </script>
+</body>
+</html>

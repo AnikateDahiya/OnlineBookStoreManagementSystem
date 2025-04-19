@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>My Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            max-width: 500px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Account</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="cart.html">Cart</a></li>
+            </ul>
+            <div class="login-logout-container">
+                <a href="login.html" class="login-button" id="login-link">Login</a>
+                <a href="#" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h2>Account Details</h2>
+        <div id="user-details" style="text-align:center; margin-bottom:20px; font-weight:bold;"></div>
+        <form id="account-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required />
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" required />
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required />
+
+            <button type="submit">Update Account</button>
+        </form>
+        <div id="message"></div>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script>
+        // Load users from localStorage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        // Load current logged in user from sessionStorage
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const messageDiv = document.getElementById('message');
+
+        // Populate form with current user details if logged in
+        function populateForm() {
+            if (currentUser) {
+                usernameInput.value = currentUser.username || '';
+                emailInput.value = currentUser.email || '';
+                passwordInput.value = currentUser.password || '';
+                // Show user details above form
+                const userDetailsDiv = document.getElementById('user-details');
+                userDetailsDiv.innerText = `Logged in as: ${currentUser.username} (${currentUser.email})`;
+            } else {
+                messageDiv.style.color = 'red';
+                messageDiv.innerText = 'You are not logged in. Please login first.';
+                usernameInput.disabled = true;
+                emailInput.disabled = true;
+                passwordInput.disabled = true;
+                document.querySelector('button[type="submit"]').disabled = true;
+            }
+        }
+
+        populateForm();
+
+        // Update user details on form submit
+        document.getElementById('account-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (!currentUser) return;
+
+            const newUsername = usernameInput.value.trim();
+            const newEmail = emailInput.value.trim();
+            const newPassword = passwordInput.value.trim();
+
+            if (!newUsername || !newEmail || !newPassword) {
+                messageDiv.style.color = 'red';
+                messageDiv.innerText = 'All fields are required.';
+                return;
+            }
+
+            // Check if username is taken by another user
+            const usernameTaken = users.some(u => u.username === newUsername && u.username !== currentUser.username);
+            if (usernameTaken) {
+                messageDiv.style.color = 'red';
+                messageDiv.innerText = 'Username is already taken.';
+                return;
+            }
+
+            // Update user in users array
+            users = users.map(u => {
+                if (u.username === currentUser.username) {
+                    return { username: newUsername, email: newEmail, password: newPassword };
+                }
+                return u;
+            });
+
+            // Update currentUser and save to sessionStorage and localStorage
+            currentUser = { username: newUsername, email: newEmail, password: newPassword };
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            localStorage.setItem('users', JSON.stringify(users));
+
+            messageDiv.style.color = 'green';
+            messageDiv.innerText = 'Account updated successfully!';
+        });
+
+        // Login/logout toggle logic for navigation links
+        const loginLink = document.getElementById('login-link');
+        const logoutLink = document.getElementById('logout-link');
+
+        function checkLoginStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        }
+
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+
+        checkLoginStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .about-section {
+            margin-bottom: 30px;
+        }
+        .about-section p, .about-section ul {
+            font-size: 1.1em;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .about-section ul {
+            padding-left: 20px;
+        }
+        .about-section ul li {
+            margin-bottom: 10px;
+        }
+        .team-member {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 3px solid #2980b9;
+        }
+        .team-member h3 {
+            margin: 0 0 5px 0;
+            color: #2980b9;
+        }
+        .team-member p {
+            margin: 0;
+            font-style: italic;
+            color: #555;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Book Heaven</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="account.html">My Account</a></li>
+                <li><a href="cart.html">Cart</a></li>
+            </ul>
+            <div class="login-logout-container">
+                <a href="login.html" class="login-button" id="login-link">Login</a>
+                <a href="#" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="about-section">
+            <h2>Our Mission</h2>
+            <p>At Book Heaven, our mission is to foster a love for reading and provide a welcoming space for book lovers of all ages. We believe that books have the power to inspire, educate, and transform lives.</p>
+        </section>
+
+        <section class="about-section">
+            <h2>Our Values</h2>
+            <ul>
+                <li><strong>Community:</strong> We are committed to supporting our local community and promoting literacy.</li>
+                <li><strong>Diversity:</strong> We celebrate diverse voices and strive to offer a wide range of genres and authors.</li>
+                <li><strong>Quality:</strong> We carefully curate our selection to ensure that we provide only the best books to our customers.</li>
+                <li><strong>Customer Service:</strong> Our team is dedicated to providing exceptional service and helping you find your next great read.</li>
+            </ul>
+        </section>
+
+        <section class="about-section">
+            <h2>Our History</h2>
+            <p>Founded in 2023, Book Heaven started as a small independent bookstore with a passion for literature. Over the years, we have grown into a beloved community hub, hosting author events, book clubs, and workshops. Our commitment to promoting reading and literacy has remained at the heart of everything we do.</p>
+        </section>
+
+        <section class="about-section">
+            <h2>Meet Our Team</h2>
+            <div class="team-member">
+                <img src="images/team-member2.jpg" alt="Team Member 1" />
+                <div>
+                    <h3>Jane Doe</h3>
+                    <p>Founder & CEO - "Books have always been my passion and my purpose."</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="images/team-member2.jpg" alt="Team Member 2" />
+                <div>
+                    <h3>John Smith</h3>
+                    <p>Head of Marketing - "Connecting readers with stories that matter."</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="images/team-member2.jpg" alt="Team Member 3" />
+                <div>
+                    <h3>Emily Johnson</h3>
+                    <p>Community Manager - "Building a community of book lovers one page at a time."</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Book Heaven. All rights reserved.</p>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>

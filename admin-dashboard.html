@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #fff;
+            color: #333;
+            padding: 15px 0;
+            text-align: center;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        form input, form textarea {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1 1 200px;
+        }
+        form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        form button {
+            padding: 12px 25px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex: 1 1 100px;
+            align-self: center;
+        }
+        form button:hover {
+            background: #218838;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background: #f4f4f4;
+        }
+        button.remove-btn {
+            background: #dc3545;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button.remove-btn:hover {
+            background: #c82333;
+        }
+        .message {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+        nav {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="admin-dashboard.html">Admin Dashboard</a>
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Manage Books</h2>
+        <form id="add-book-form">
+            <input type="text" id="title" placeholder="Book Title" required />
+            <input type="text" id="author" placeholder="Author" required />
+            <input type="number" id="price" placeholder="Price" step="0.01" required />
+            <input type="text" id="image" placeholder="Image URL" required />
+            <textarea id="description" placeholder="Description" required></textarea>
+            <label>
+                <input type="checkbox" id="featured" />
+                Featured Book (Show on Homepage)
+            </label>
+            <button type="submit">Add / Update Book</button>
+        </form>
+        <div class="message" id="message"></div>
+        <table id="books-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Books will be listed here -->
+            </tbody>
+        </table>
+    </main>
+    <script>
+        const booksTableBody = document.querySelector('#books-table tbody');
+        const messageDiv = document.getElementById('message');
+        const addBookForm = document.getElementById('add-book-form');
+
+        // Load books from localStorage or initialize empty array
+        let books = JSON.parse(localStorage.getItem('books')) || [];
+
+        // Function to render books in the table
+        function renderBooks() {
+            booksTableBody.innerHTML = '';
+            books.forEach((book, index) => {
+                const tr = document.createElement('tr');
+
+                tr.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>$${book.price.toFixed(2)}</td>
+                    <td><img src="${book.image}" alt="${book.title}" style="max-width: 60px; border-radius: 4px;" /></td>
+                    <td>${book.description}</td>
+                    <td>
+                        <button class="remove-btn" data-index="${index}">Remove</button>
+                    </td>
+                `;
+                booksTableBody.appendChild(tr);
+            });
+            attachRemoveListeners();
+        }
+
+        // Attach event listeners to remove buttons
+        function attachRemoveListeners() {
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const index = button.getAttribute('data-index');
+                    books.splice(index, 1);
+                    saveBooks();
+                    renderBooks();
+                    showMessage('Book removed successfully.', 'green');
+                });
+            });
+        }
+
+        // Save books to localStorage
+        function saveBooks() {
+            localStorage.setItem('books', JSON.stringify(books));
+        }
+
+        // Show message
+        function showMessage(msg, color = 'green') {
+            messageDiv.style.color = color;
+            messageDiv.textContent = msg;
+            setTimeout(() => {
+                messageDiv.textContent = '';
+            }, 3000);
+        }
+
+        // Add or update book on form submit
+        addBookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const price = parseFloat(document.getElementById('price').value);
+            const image = document.getElementById('image').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const featured = document.getElementById('featured').checked;
+
+            if (!title || !author || isNaN(price) || !image || !description) {
+                showMessage('Please fill in all fields correctly.', 'red');
+                return;
+            }
+
+            // Check if book exists, update if yes
+            const existingIndex = books.findIndex(b => b.title.toLowerCase() === title.toLowerCase());
+            if (existingIndex !== -1) {
+                books[existingIndex] = { title, author, price, image, description, featured };
+                showMessage('Book updated successfully.');
+            } else {
+                books.push({ title, author, price, image, description, featured });
+                showMessage('Book added successfully.');
+            }
+
+            saveBooks();
+            renderBooks();
+            addBookForm.reset();
+        });
+
+        // Initial render
+        renderBooks();
+    </script>
+</body>
+</html>

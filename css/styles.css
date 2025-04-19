@@ -1,0 +1,120 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #333;
+    color: #fff;
+}
+
+/* Product and Category Styles */
+.product-list, .category-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.product-item, .category-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    width: 200px; /* Set a fixed width for product items */
+}
+
+.product-item img,
+.category-item img {
+    width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 200px; /* Set a maximum width for product images */
+    border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+.category-item img {
+    max-width: 250px; /* Set a maximum width for category images */
+}
+
+button {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #4cae4c;
+}
+.cart-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-item h3 {
+    margin: 0;
+}
+
+#checkout-button {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Login/logout container positioned top right */
+.login-logout-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.login-logout-container a {
+    margin-left: 15px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.login-logout-container a:hover {
+    text-decoration: underline;
+}
